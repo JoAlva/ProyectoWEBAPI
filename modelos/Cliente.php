@@ -1,4 +1,9 @@
 <?php
+// ---------------------------------------------
+//  IMPORTANTE: llamar la conexión correctamente
+// ---------------------------------------------
+require_once __DIR__ . "/../configuracion/conexion.php";
+
 class Cliente extends Conectar {
 
     // ----------------------------------------------------------
@@ -81,3 +86,4 @@ class Cliente extends Conectar {
     }
 }
 ?>
+
