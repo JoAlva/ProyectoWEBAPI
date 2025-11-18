@@ -5,14 +5,13 @@ class Conectar {
 
     protected function conectar_bd() {
         try {
+            $host = getenv("MYSQLHOST");
+            $db   = getenv("MYSQLDATABASE");
+            $user = getenv("MYSQLUSER");
+            $pass = getenv("MYSQLPASSWORD");
+            $port = getenv("MYSQLPORT");
 
-            $host = $_ENV['MYSQLHOST'] ?? 'localhost';
-            $db   = $_ENV['MYSQLDATABASE'] ?? 'proyecto';
-            $user = $_ENV['MYSQLUSER'] ?? 'root';
-            $pass = $_ENV['MYSQLPASSWORD'] ?? '';
-            $port = $_ENV['MYSQLPORT'] ?? '3306';
-
-            $dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8";
+            $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8";
 
             $this->conexion_bd = new PDO($dsn, $user, $pass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
