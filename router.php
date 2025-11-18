@@ -1,16 +1,18 @@
 <?php
 
-// Obtener la ruta solicitada
+// Obtener ruta sin query params
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Si el archivo existe físicamente, servirlo directamente
+// Construir path real del archivo
 $file = __DIR__ . $request;
+
+// Si el archivo existe físicamente, lo servimos
 if (is_file($file)) {
     return false;
 }
 
-// Redirigir rutas hacia carpetas (controlador/, modelos/, etc.)
-if (preg_match('/^\/controlador\/.+\.php$/', $request)) {
+// RUTAS PARA CONTROLADOR, MODELOS, CONFIGURACION
+if (preg_match('#^/(controlador|modelos|configuracion)/.+\.php$#', $request)) {
     require __DIR__ . $request;
     exit;
 }
