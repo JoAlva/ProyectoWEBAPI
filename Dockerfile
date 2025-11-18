@@ -1,28 +1,23 @@
+# Instalar y habilitar Apache + PHP
 FROM php:8.2-apache
 
-# Instalar extensiones necesarias
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Habilitar mod_rewrite
 RUN a2enmod rewrite
 
-# Configurar Apache para escuchar el puerto dinámico de Railway
+# 1. Copiar archivo app.conf primero
+COPY app.conf /etc/apache2/sites-available/app.conf
+
+# 2. Modificar puertos dinámicos
 RUN sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
 RUN sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:${PORT}>/" /etc/apache2/sites-available/app.conf
 
-# Copiar configuración personalizada de Apache
-COPY app.conf /etc/apache2/sites-available/app.conf
-
-# Habilitar tu sitio
+# 3. Habilitar sitio
 RUN a2dissite 000-default.conf && a2ensite app.conf
 
-# Copiar archivos de la app
+# 4. Copiar proyecto
 COPY . /var/www/html/
 
-# Permisos
 RUN chown -R www-data:www-data /var/www/html
 
-# Exponer el puerto dinámico
-EXPOSE ${PORT}
-
-CMD ["apache2-foreground"]
+EXPOSE 80
