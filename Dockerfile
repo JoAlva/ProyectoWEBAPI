@@ -1,24 +1,18 @@
 FROM php:8.2-apache
 
-# Instalar extensiones necesarias
+# Extensiones necesarias
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Instalar Composer dentro del contenedor
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Copiar configuración de Apache
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Copiar archivos del proyecto al servidor web
+# Copiar aplicación
 COPY . /var/www/html/
 
-# Ir a la carpeta del proyecto
-WORKDIR /var/www/html/
-
-# Instalar dependencias de Composer (genera vendor)
-RUN composer install --no-dev --optimize-autoloader
-
-# Establecer permisos
+# Permisos
 RUN chown -R www-data:www-data /var/www/html
 
-# Activar módulo rewrite
+# Activar mod_rewrite
 RUN a2enmod rewrite
 
 EXPOSE 80
