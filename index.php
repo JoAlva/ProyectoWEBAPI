@@ -1,0 +1,7 @@
+<?php
+
+// Para pruebas
+echo json_encode([
+    "status" => "OK",
+    "message" => "API funcionando en Railway"
+]);
