@@ -1,24 +1,30 @@
 <?php
 class Conectar {
-    protected $dbh;
 
-    protected function Conexion() {
+    protected $conexion_bd;
+
+    protected function conectar_bd() {
         try {
-            $host = "mysql.railway.internal";
-            $dbname = "railway";
-            $user = "root";
-            $pass = "OSqpNpBuwhRqGqKRgsJaydhVQIGICtnr";
-            $port = "3306";
+            // VARIABLES DE RAILWAY
+            $host = getenv('MYSQLHOST');
+            $db = getenv('MYSQLDATABASE');
+            $user = getenv('MYSQLUSER');
+            $pass = getenv('MYSQLPASSWORD');
+            $port = getenv('MYSQLPORT');
 
-            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";
+            $conexion = $this->conexion_bd = new PDO(
+                "mysql:host=$host;port=$port;dbname=$db",
+                $user,
+                $pass
+            );
 
-            $this->dbh = new PDO($dsn, $user, $pass);
-            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conexion->exec("SET NAMES 'utf8'");
 
-            return $this->dbh;
+            return $conexion;
+
         } catch (Exception $e) {
-            die("❌ Error de conexión: " . $e->getMessage());
+            die("❌ Error en la conexión: " . $e->getMessage());
         }
     }
 }
-?>
