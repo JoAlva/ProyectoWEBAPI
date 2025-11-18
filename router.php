@@ -1,12 +1,19 @@
 <?php
 
-// Si la ruta existe en el disco, servirla directo
-if (php_sapi_name() === 'cli-server') {
-    $file = __DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    if (is_file($file)) {
-        return false;
-    }
+// Obtener la ruta solicitada
+$request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// Si el archivo existe físicamente, servirlo directamente
+$file = __DIR__ . $request;
+if (is_file($file)) {
+    return false;
 }
 
-// Redirigir todo a index o directamente al controlador
-require_once __DIR__ . $_SERVER['REQUEST_URI'];
+// Redirigir rutas hacia carpetas (controlador/, modelos/, etc.)
+if (preg_match('/^\/controlador\/.+\.php$/', $request)) {
+    require __DIR__ . $request;
+    exit;
+}
+
+// Si nada coincide, cargar index
+require __DIR__ . "/index.php";
