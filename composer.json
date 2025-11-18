@@ -1,0 +1,8 @@
+{
+  "name": "proyecto/api",
+  "description": "API PHP para CRUD",
+  "require": {},
+  "scripts": {
+    "start": "php -S 0.0.0.0:8080 -t ."
+  }
+}
