@@ -9,16 +9,16 @@ RUN a2enmod rewrite
 # Copiar conf personalizada
 COPY app.conf /etc/apache2/sites-available/app.conf
 
-# Reemplazar Listen 80 por Listen ${PORT}
+# Cambiar Listen 80 a Listen ${PORT} dinámico
 RUN sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
 
-# Reemplazar <VirtualHost *:80> por <VirtualHost *:${PORT}>
+# Cambiar VirtualHost de :80 a :${PORT}
 RUN sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/app.conf
 
 # Deshabilitar default y habilitar app
 RUN a2dissite 000-default.conf && a2ensite app.conf
 
-# Copiar proyecto
+# Copiar el proyecto
 COPY . /var/www/html/
 
 # Permisos
